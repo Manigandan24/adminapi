@@ -1,0 +1,3 @@
+insert into role(code,value) values('edit','edit the policy')
+insert into role(code,value) values('view', 'view the policy')
+insert into role(code,value) values('create', 'create the policy')
