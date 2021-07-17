@@ -28,7 +28,9 @@ import com.mss.admin.dto.Reason;
 import com.mss.admin.dto.Role;
 import com.mss.admin.dto.State;
 import com.mss.admin.dto.User;
+import com.mss.admin.dto.User2;
 import com.mss.admin.dto.UserRole;
+import com.mss.admin.dto.UserRole2;
 import com.mss.admin.repo.CompanyRepo;
 import com.mss.admin.repo.CoverageRepo;
 import com.mss.admin.repo.GenderRepo;
@@ -38,6 +40,7 @@ import com.mss.admin.repo.ReasonRepo;
 import com.mss.admin.repo.RoleRepo;
 import com.mss.admin.repo.StateRepo;
 import com.mss.admin.repo.UserRepo;
+import com.mss.admin.repo.UserRepo2;
 import com.mss.admin.repo.UserRoleRepo;
 
 @Service
@@ -72,6 +75,9 @@ public class AdminService {
 
 	@Autowired
 	private UserRepo userRepo;
+	
+	@Autowired
+	private UserRepo2 userRepo2;
 
 	public void saveCompany(List<CompanyCode> codes) {
 		List<com.mss.admin.dto.Company> list = new ArrayList<>();
@@ -181,6 +187,24 @@ public class AdminService {
 			userRepo.save(clz);
 		} else
 			updateUser(userCode);
+	}
+	
+	public void saveSingleUser(UserCode userCode) {
+		User2 clz = new User2();
+		Optional<User2> userDb = userRepo2.findByUsername(userCode.getUsername());
+		if (!userDb.isPresent()) {
+			clz.setUsername(userCode.getUsername());
+			clz.setPassword(userCode.getPassword());
+			if (!userCode.getUserRoles().isEmpty()) {
+				userCode.getUserRoles().forEach(a -> {
+					UserRole2 role = new UserRole2();
+					role.setCode(a.getRole());
+					role.setValue(a.getDescription());
+					clz.setRoles(role);
+				});
+			}
+			userRepo2.save(clz);
+		} 
 	}
 
 	// update password, email, description

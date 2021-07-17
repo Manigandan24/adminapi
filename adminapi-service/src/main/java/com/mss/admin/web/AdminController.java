@@ -23,6 +23,8 @@ import com.mss.admin.dao.ReasonCode;
 import com.mss.admin.dao.RoleCode;
 import com.mss.admin.dao.StateCode;
 import com.mss.admin.dao.UserCode;
+import com.mss.admin.dto.User2;
+import com.mss.admin.repo.UserRepo2;
 import com.mss.admin.service.AdminService;
 
 @RestController
@@ -31,6 +33,10 @@ public class AdminController {
 
 	@Autowired
 	AdminService adminService;
+	
+	
+	@Autowired
+	private UserRepo2 userRepo2;
 	
 	@CrossOrigin(origins = "http://localhost:4100")
 	@GetMapping("codes")
@@ -116,6 +122,16 @@ public class AdminController {
 	@PostMapping("user")
 	public void addUser(@RequestBody UserCode category) {
 		adminService.saveUser(category);
+	}
+	
+	@PostMapping("singleuser")
+	public void addSingleUser(@RequestBody UserCode category) {
+		adminService.saveSingleUser(category);
+	}
+	
+	@GetMapping("singleuser")
+	public List<User2> getSingleUser() {
+		return userRepo2.findAll();
 	}
 	
 	@PutMapping("user")
